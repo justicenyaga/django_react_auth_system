@@ -1,5 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import configureStore from "./store/configureStore";
 
 import Layout from "./hoc/Layout";
 
@@ -10,26 +13,30 @@ import ActivateAccountPage from "./pages/ActivateAccountPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ResetPasswordConfirmPage from "./pages/ResetPasswordConfirmPage";
 
+const store = configureStore();
+
 const App = () => {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route
-            path="/activate/:uid/:token"
-            element={<ActivateAccountPage />}
-          />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route
-            path="/password/reset/confirm/:uid/:token"
-            element={<ResetPasswordConfirmPage />}
-          />
-        </Routes>
-      </Layout>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route
+              path="/activate/:uid/:token"
+              element={<ActivateAccountPage />}
+            />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route
+              path="/password/reset/confirm/:uid/:token"
+              element={<ResetPasswordConfirmPage />}
+            />
+          </Routes>
+        </Layout>
+      </Router>
+    </Provider>
   );
 };
 
