@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { login, loadUser } from "../store/auth";
+import { login } from "../store/auth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
