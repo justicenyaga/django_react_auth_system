@@ -27,6 +27,10 @@ const slice = createSlice({
       auth.error = null;
     },
 
+    userSignedUp: (auth, action) => {
+      auth.isAuthenticated = false;
+    },
+
     userLoaded: (auth, action) => {
       auth.user = action.payload;
       auth.loading = false;
@@ -73,6 +77,7 @@ const slice = createSlice({
 const {
   authStarted,
   authSuccess,
+  userSignedUp,
   userLoaded,
   userLoadingFailed,
   authFailed,
@@ -141,7 +146,7 @@ export const login = (email, password) => async (dispatch) => {
     "Content-Type": "application/json",
   };
 
-  const body = JSON.stringify({ email, password });
+  const body = { email, password };
 
   await dispatch(
     apiCallBegun({
@@ -156,6 +161,42 @@ export const login = (email, password) => async (dispatch) => {
   );
 
   dispatch(loadUser());
+};
+
+export const signup =
+  (name, email, password, re_password) => async (dispatch) => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    const body = { name, email, password, re_password };
+
+    await dispatch(
+      apiCallBegun({
+        url: "/auth/users/",
+        method: "POST",
+        data: body,
+        headers,
+        onStart: authStarted.type,
+        onSuccess: userSignedUp.type,
+        onError: authFailed.type,
+      })
+    );
+  };
+
+export const verify = (uid, token) => async (dispatch) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const body = { uid, token };
+
+  try {
+    await httpService.post("/auth/users/activation/", body, headers);
+    dispatch({ type: "ACTIVATION_SUCCESS" });
+  } catch (error) {
+    dispatch({ type: "ACTIVATION_FAILED" });
+  }
 };
 
 export const reset_password = (email) => async (dispatch) => {
