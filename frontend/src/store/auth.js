@@ -158,6 +158,41 @@ export const login = (email, password) => async (dispatch) => {
   dispatch(loadUser());
 };
 
+export const reset_password = (email) => async (dispatch) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const body = { email };
+
+  try {
+    await httpService.post("/auth/users/reset_password/", body, headers);
+    dispatch({ type: "RESET_PASSWORD_SUCCESS" });
+  } catch (error) {
+    dispatch({ type: "RESET_PASSWORD_FAILED" });
+  }
+};
+
+export const reset_password_confirm =
+  (uid, token, new_password, re_new_password) => async (dispatch) => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    const body = { uid, token, new_password, re_new_password };
+
+    try {
+      await httpService.post(
+        "/auth/users/reset_password_confirm/",
+        body,
+        headers
+      );
+      dispatch({ type: "RESET_PASSWORD_CONFIRM_SUCCESS" });
+    } catch (error) {
+      dispatch({ type: "RESET_PASSWORD_CONFIRM_FAILED" });
+    }
+  };
+
 export const logout = () => (dispatch) => {
   dispatch({ type: loggedOut.type });
 };
