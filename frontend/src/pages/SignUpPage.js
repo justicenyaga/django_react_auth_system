@@ -97,14 +97,18 @@ const SignUpPage = () => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary  mt-3">
+        <button
+          type="submit"
+          className="btn btn-primary  mt-3"
+          style={{ borderRadius: "50px" }}
+        >
           Sign Up
         </button>
-
-        <p className="my-3">
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
       </form>
+
+      <p className="my-3">
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
     </div>
   );
 };

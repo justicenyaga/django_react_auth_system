@@ -60,18 +60,22 @@ const LoginPage = () => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary  mt-3">
+        <button
+          type="submit"
+          className="btn btn-primary mt-3"
+          style={{ borderRadius: "50px" }}
+        >
           Login
         </button>
-
-        <p className="my-3">
-          Don't have an account? <Link to="/signup">Sign Up</Link>
-        </p>
-
-        <p className="my-3">
-          Forgot your password? <Link to="/reset-password">Reset Password</Link>
-        </p>
       </form>
+
+      <p className="my-3">
+        Don't have an account? <Link to="/signup">Sign Up</Link>
+      </p>
+
+      <p className="my-3">
+        Forgot your password? <Link to="/reset-password">Reset Password</Link>
+      </p>
     </div>
   );
 };
