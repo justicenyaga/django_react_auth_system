@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { login } from "../store/auth";
 
+import httpService from "../utils/httpService";
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,6 +25,15 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
+  };
+
+  const handleContinueWithGoogle = async () => {
+    try {
+      const response = await httpService.get(
+        "/auth/o/google-oauth2/?redirect_uri=http://localhost:8000"
+      );
+      window.location.replace(response.data.authorization_url);
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -68,6 +79,15 @@ const LoginPage = () => {
           Login
         </button>
       </form>
+
+      <button
+        type="button"
+        className="btn btn-danger mt-3"
+        style={{ borderRadius: "50px" }}
+        onClick={handleContinueWithGoogle}
+      >
+        Continue with Google
+      </button>
 
       <p className="my-3">
         Don't have an account? <Link to="/signup">Sign Up</Link>

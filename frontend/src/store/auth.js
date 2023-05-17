@@ -8,7 +8,7 @@ const slice = createSlice({
     access: localStorage.getItem("access"),
     refresh: localStorage.getItem("refresh"),
     isAuthenticated: false,
-    user: null,
+    user: {},
     loading: false,
     error: null,
   },
@@ -37,7 +37,7 @@ const slice = createSlice({
     },
 
     userLoadingFailed: (auth, action) => {
-      auth.user = null;
+      auth.user = {};
       auth.loading = false;
     },
 
@@ -67,7 +67,7 @@ const slice = createSlice({
       auth.isAuthenticated = false;
       auth.access = null;
       auth.refresh = null;
-      auth.user = null;
+      auth.user = {};
 
       auth.error = null;
     },
@@ -141,6 +141,36 @@ export const loadUser = () => (dispatch) => {
   }
 };
 
+export const googleAuthenticate = (state, code) => async (dispatch) => {
+  if (state && code && !localStorage.getItem("access")) {
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    const details = { code, state };
+
+    const formBody = Object.keys(details)
+      .map(
+        (key) =>
+          encodeURIComponent(key) + "=" + encodeURIComponent(details[key])
+      )
+      .join("&");
+
+    await dispatch(
+      apiCallBegun({
+        url: `/auth/o/google-oauth2/?${formBody}`,
+        method: "POST",
+        headers,
+        onStart: authStarted.type,
+        onSuccess: authSuccess.type,
+        onError: authFailed.type,
+      })
+    );
+
+    dispatch(loadUser());
+  }
+};
+
 export const login = (email, password) => async (dispatch) => {
   const headers = {
     "Content-Type": "application/json",
@@ -164,12 +194,12 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const signup =
-  (name, email, password, re_password) => async (dispatch) => {
+  (first_name, last_name, email, password, re_password) => async (dispatch) => {
     const headers = {
       "Content-Type": "application/json",
     };
 
-    const body = { name, email, password, re_password };
+    const body = { first_name, last_name, email, password, re_password };
 
     await dispatch(
       apiCallBegun({

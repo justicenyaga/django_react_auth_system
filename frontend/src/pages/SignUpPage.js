@@ -4,18 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { signup } from "../store/auth";
 
+import httpService from "../utils/httpService";
+
 const SignUpPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [accountCreated, setAccountCreated] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     re_password: "",
   });
-  const { name, email, password, re_password } = formData;
+  const { first_name, last_name, email, password, re_password } = formData;
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -26,9 +29,18 @@ const SignUpPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === re_password) {
-      dispatch(signup(name, email, password, re_password));
+      dispatch(signup(first_name, last_name, email, password, re_password));
       setAccountCreated(true);
     }
+  };
+
+  const handleContinueWithGoogle = async () => {
+    try {
+      const response = await httpService.get(
+        "/auth/o/google-oauth2/?redirect_uri=http://localhost:8000"
+      );
+      window.location.replace(response.data.authorization_url);
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -42,16 +54,30 @@ const SignUpPage = () => {
       <p>Create your account</p>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="form-group">
-          <label htmlFor="name">Name</label>
+          <label htmlFor="first_name">First Name</label>
           <input
             type="text"
-            name="name"
-            value={name}
+            name="first_name"
+            value={first_name}
             onChange={handleOnChange}
             className="form-control"
-            id="name"
+            id="first_name"
             required
-            placeholder="Enter name"
+            placeholder="Enter First Name"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="last_name">Last Name</label>
+          <input
+            type="text"
+            name="last_name"
+            value={last_name}
+            onChange={handleOnChange}
+            className="form-control"
+            id="last_name"
+            required
+            placeholder="Enter Last Name"
           />
         </div>
 
@@ -105,6 +131,15 @@ const SignUpPage = () => {
           Sign Up
         </button>
       </form>
+
+      <button
+        type="button"
+        className="btn btn-danger mt-3"
+        style={{ borderRadius: "50px" }}
+        onClick={handleContinueWithGoogle}
+      >
+        Continue with Google
+      </button>
 
       <p className="my-3">
         Already have an account? <Link to="/login">Login</Link>
