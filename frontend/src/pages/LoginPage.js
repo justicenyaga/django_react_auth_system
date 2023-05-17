@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { login, loadUser } from "../store/auth";
 
@@ -14,6 +14,8 @@ const LoginPage = () => {
   });
   const { email, password } = formData;
 
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -23,8 +25,9 @@ const LoginPage = () => {
     dispatch(login(email, password));
   };
 
-  // Is the user authenticated?
-  // If yes, redirect them to the home page
+  useEffect(() => {
+    isAuthenticated && navigate("/");
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="container mt-5">

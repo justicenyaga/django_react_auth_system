@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { apiCallBegun } from "./api";
+import httpService from "../utils/httpService";
 
 const slice = createSlice({
   name: "auth",
@@ -46,12 +47,69 @@ const slice = createSlice({
       auth.error = action.payload;
       auth.loading = false;
     },
+
+    authenticationVerified: (auth, action) => {
+      auth.isAuthenticated = true;
+    },
+
+    authenticationFailed: (auth, action) => {
+      auth.isAuthenticated = false;
+    },
+
+    loggedOut: (auth, action) => {
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+
+      auth.isAuthenticated = false;
+      auth.access = null;
+      auth.refresh = null;
+      auth.user = null;
+
+      auth.error = null;
+    },
   },
 });
 
-const { authStarted, authSuccess, userLoaded, userLoadingFailed, authFailed } =
-  slice.actions;
+const {
+  authStarted,
+  authSuccess,
+  userLoaded,
+  userLoadingFailed,
+  authFailed,
+  authenticationVerified,
+  authenticationFailed,
+  loggedOut,
+} = slice.actions;
 export default slice.reducer;
+
+export const checkAuthenticated = () => async (dispatch) => {
+  const access = localStorage.getItem("access");
+
+  if (access) {
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+
+    const data = { token: access };
+
+    try {
+      const response = await httpService.post(
+        "/auth/jwt/verify/",
+        data,
+        headers
+      );
+
+      if (response.data.code !== "token_not_valid") {
+        await dispatch(authenticationVerified());
+      }
+    } catch (error) {
+      dispatch(authenticationFailed());
+    }
+  } else {
+    dispatch(authenticationFailed());
+  }
+};
 
 export const loadUser = () => (dispatch) => {
   const access = localStorage.getItem("access");
@@ -98,4 +156,8 @@ export const login = (email, password) => async (dispatch) => {
   );
 
   dispatch(loadUser());
+};
+
+export const logout = () => (dispatch) => {
+  dispatch({ type: loggedOut.type });
 };
