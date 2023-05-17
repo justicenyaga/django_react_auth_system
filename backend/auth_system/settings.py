@@ -158,6 +158,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+DOMAIN = "localhost:3000"  # Will be used on email templates sent to users
+SITE_NAME = "Auth System"  # Will be used on email templates sent to users
+
 DJOSER = {
     'LOGIN_FIELD': "email",
     'USER_CREATE_PASSWORD_RETYPE': True,
