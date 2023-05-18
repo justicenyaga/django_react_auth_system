@@ -37,7 +37,7 @@ const SignUpPage = () => {
   const handleContinueWithGoogle = async () => {
     try {
       const response = await httpService.get(
-        "/auth/o/google-oauth2/?redirect_uri=http://localhost:8000/google"
+        "/auth/o/google-oauth2/?redirect_uri=https://django-react-auth-system.azurewebsites.net/google"
       );
       window.location.replace(response.data.authorization_url);
     } catch (error) {}
@@ -46,7 +46,7 @@ const SignUpPage = () => {
   const handleContinueWithFacebook = async () => {
     try {
       const response = await httpService.get(
-        "/auth/o/facebook/?redirect_uri=http://localhost:8000/facebook"
+        "/auth/o/facebook/?redirect_uri=https://django-react-auth-system.azurewebsites.net/facebook"
       );
       window.location.replace(response.data.authorization_url);
     } catch (error) {}
