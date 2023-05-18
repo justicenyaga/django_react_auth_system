@@ -18,6 +18,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -27,6 +29,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+if ENVIRONMENT == 'production':
+    DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -41,6 +46,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    'corsheaders',
+    'storages',
     'rest_framework',
     'djoser',
     'social_django',
@@ -48,11 +55,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     'accounts.apps.AccountsConfig',
+    'build',  # <-- react build folder
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # <-- corsheaders
     'social_django.middleware.SocialAuthExceptionMiddleware',  # <-- social auth
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- whitenoise
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -191,7 +201,10 @@ DJOSER = {
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:8000/google', 'http://localhost:8000/facebook'],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [
+        'https://django-react-auth-system.azurewebsites.net/google',
+        'https://django-react-auth-system.azurewebsites.net/facebook'
+    ],
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
         'user': 'accounts.serializers.UserCreateSerializer',
@@ -220,6 +233,9 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
+
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
