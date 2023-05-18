@@ -173,8 +173,10 @@ SIMPLE_JWT = {
 }
 
 
-DOMAIN = "localhost:8000"  # Will be used on email templates sent to users
-SITE_NAME = "Auth System"  # Will be used on email templates sent to users
+# Will be used on email templates sent to users
+DOMAIN = os.environ.get("DOMAIN")
+SITE_NAME = os.environ.get("SITE_NAME")
+
 
 DJOSER = {
     'LOGIN_FIELD': "email",
