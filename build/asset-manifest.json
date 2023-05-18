@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/js/main.4af149c3.js",
+    "main.js": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/js/main.643665a6.js",
     "index.html": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/index.html",
-    "main.4af149c3.js.map": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/js/main.4af149c3.js.map"
+    "main.643665a6.js.map": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/js/main.643665a6.js.map"
   },
-  "entrypoints": ["static/js/main.4af149c3.js"]
+  "entrypoints": ["static/js/main.643665a6.js"]
 }

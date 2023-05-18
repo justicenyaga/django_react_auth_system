@@ -7,7 +7,7 @@ import { checkAuthenticated, loadUser, logout } from "../store/auth";
 const Navbar = () => {
   const dispatch = useDispatch();
 
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(checkAuthenticated());
@@ -65,6 +65,14 @@ const Navbar = () => {
                   </Link>
                 </li>
               </>
+            )}
+
+            {isAuthenticated && (
+              <li className="nav-item ml-auto">
+                <span className="nav-link">
+                  {user && `${user.first_name} ${user.last_name}`}
+                </span>
+              </li>
             )}
           </ul>
         </div>
