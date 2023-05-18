@@ -30,12 +30,20 @@ const LoginPage = () => {
   const handleContinueWithGoogle = async () => {
     try {
       const response = await httpService.get(
-        "/auth/o/google-oauth2/?redirect_uri=http://localhost:8000"
+        "/auth/o/google-oauth2/?redirect_uri=http://localhost:8000/google"
       );
       window.location.replace(response.data.authorization_url);
     } catch (error) {}
   };
 
+  const handleContinueWithFacebook = async () => {
+    try {
+      const response = await httpService.get(
+        "/auth/o/facebook/?redirect_uri=http://localhost:8000/facebook"
+      );
+      window.location.replace(response.data.authorization_url);
+    } catch (error) {}
+  };
   useEffect(() => {
     isAuthenticated && navigate("/");
   }, [isAuthenticated, navigate]);
@@ -87,6 +95,17 @@ const LoginPage = () => {
         onClick={handleContinueWithGoogle}
       >
         Continue with Google
+      </button>
+
+      <br />
+
+      <button
+        type="button"
+        className="btn btn-primary mt-3"
+        style={{ borderRadius: "50px" }}
+        onClick={handleContinueWithFacebook}
+      >
+        Continue with Facebook
       </button>
 
       <p className="my-3">

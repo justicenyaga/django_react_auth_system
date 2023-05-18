@@ -1,39 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
-import queryString from "query-string";
+import { Link } from "react-router-dom";
 
-import {
-  checkAuthenticated,
-  loadUser,
-  logout,
-  googleAuthenticate,
-} from "../store/auth";
+import { checkAuthenticated, loadUser, logout } from "../store/auth";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  let location = useLocation();
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const values = queryString.parse(location.search);
-    const state = values.state ? values.state : null;
-    const code = values.code ? values.code : null;
-
-    if (state && code) {
-      !isAuthenticated && dispatch(googleAuthenticate(state, code));
-      if (isAuthenticated) {
-        window.history.replaceState(null, null, window.location.pathname);
-        dispatch(loadUser());
-      }
-    } else {
-      dispatch(checkAuthenticated());
-      if (isAuthenticated) {
-        dispatch(loadUser());
-      }
-    }
-  }, [dispatch, isAuthenticated, location.search]);
+    dispatch(checkAuthenticated());
+    isAuthenticated && dispatch(loadUser());
+  }, [dispatch, isAuthenticated]);
 
   const handleLogout = () => {
     dispatch(logout());

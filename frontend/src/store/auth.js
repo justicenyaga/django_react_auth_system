@@ -19,6 +19,7 @@ const slice = createSlice({
 
     authSuccess: (auth, action) => {
       localStorage.setItem("access", action.payload.access);
+      localStorage.setItem("refresh", action.payload.refresh);
 
       auth.isAuthenticated = true;
       auth.access = action.payload.access;
@@ -159,6 +160,36 @@ export const googleAuthenticate = (state, code) => async (dispatch) => {
     await dispatch(
       apiCallBegun({
         url: `/auth/o/google-oauth2/?${formBody}`,
+        method: "POST",
+        headers,
+        onStart: authStarted.type,
+        onSuccess: authSuccess.type,
+        onError: authFailed.type,
+      })
+    );
+
+    dispatch(loadUser());
+  }
+};
+
+export const facebookAuthenticate = (state, code) => async (dispatch) => {
+  if (state && code && !localStorage.getItem("access")) {
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    const details = { code, state };
+
+    const formBody = Object.keys(details)
+      .map(
+        (key) =>
+          encodeURIComponent(key) + "=" + encodeURIComponent(details[key])
+      )
+      .join("&");
+
+    await dispatch(
+      apiCallBegun({
+        url: `/auth/o/facebook/?${formBody}`,
         method: "POST",
         headers,
         onStart: authStarted.type,
