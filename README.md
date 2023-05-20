@@ -10,7 +10,7 @@ This repo contains a Django & React production level authentication functionalit
 - Sign in with Facebook
 - Password reset with email verification
 
-A live demo of the project can be found [here](https://django-react-auth-system.azurewebsites.net/).
+A live demo of the project can be found [here](https://justicenyaga.pythonanywhere.com/).
 
 ## Major Packages used in the backend
 
