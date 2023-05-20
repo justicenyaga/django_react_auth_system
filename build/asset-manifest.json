@@ -1,8 +1,10 @@
 {
   "files": {
-    "main.js": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/js/main.643665a6.js",
-    "index.html": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/index.html",
-    "main.643665a6.js.map": "https://authsystemstorage.blob.core.windows.net/authsystemcontainer/js/main.643665a6.js.map"
+    "main.js": "https://justicenyaga.pythonanywhere.com/static/js/main.86ccaaac.js",
+    "index.html": "https://justicenyaga.pythonanywhere.com/index.html",
+    "main.86ccaaac.js.map": "https://justicenyaga.pythonanywhere.com/static/js/main.86ccaaac.js.map"
   },
-  "entrypoints": ["static/js/main.643665a6.js"]
+  "entrypoints": [
+    "static/js/main.86ccaaac.js"
+  ]
 }
